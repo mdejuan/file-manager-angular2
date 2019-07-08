@@ -28,3 +28,22 @@
 .spacer {
   flex: 1 1 auto;
 }
+
+.containerUpload {
+  margin-bottom: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contentUpload {
+
+  max-width: 100%;
+
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+
+

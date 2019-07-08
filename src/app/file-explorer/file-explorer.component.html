@@ -18,14 +18,16 @@
       </mat-grid-tile>
     </mat-grid-list>
   </div>
-</div>
 
+</div>
+<div class="containerUpload">
+    <div class="contentUpload">
+      <upload [onUpload]="handleUpload"></upload>
+    </div>
+  </div>
 <mat-menu #rootMenu="matMenu" [overlapTrigger]="false">
   <ng-template matMenuContent let-element="element">
-    <button mat-menu-item [matMenuTriggerFor]="moveToMenu" [matMenuTriggerData]="{self: element}">
-      <mat-icon>open_with</mat-icon>
-      <span>Move To</span>
-    </button>
+
     <button mat-menu-item (click)="openRenameDialog(element)">
       <mat-icon>edit</mat-icon>
       <span>Rename</span>

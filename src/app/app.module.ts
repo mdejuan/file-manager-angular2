@@ -3,15 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
 import { environment } from '../environments/environment';
 import { FileService } from './service/file.service';
 import { FileExplorerModule } from './file-explorer/file-explorer.module';
 
+
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, FileExplorerModule, FlexLayoutModule, MatCardModule],
+  imports: [BrowserModule, FileExplorerModule, FlexLayoutModule, MatCardModule, BrowserAnimationsModule],
   providers: [FileService],
   bootstrap: [AppComponent]
 })

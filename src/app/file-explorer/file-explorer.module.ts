@@ -13,7 +13,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { RenameDialogComponent } from './modals/renameDialog/renameDialog.component';
 import { FileExplorerComponent } from './file-explorer.component';
-
+import {TooltipModule} from 'ng2-tooltip-directive';
+import { ngfModule } from 'angular-file';
+import { UploadComponent } from '../upload/upload.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -26,9 +28,11 @@ import { FileExplorerComponent } from './file-explorer.component';
     MatDialogModule,
     MatInputModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    ngfModule, MatIconModule,
+    TooltipModule
   ],
-  declarations: [FileExplorerComponent, NewFolderDialogComponent, RenameDialogComponent],
+  declarations: [FileExplorerComponent, NewFolderDialogComponent, RenameDialogComponent, UploadComponent],
   exports: [FileExplorerComponent],
   entryComponents: [NewFolderDialogComponent, RenameDialogComponent]
 })

@@ -1,10 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, Sanitizer, OnDestroy } from '@angular/core';
 import { FileElement } from './model/element';
 import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
-import { Observable } from 'rxjs/Observable';
 import { MatDialog } from '@angular/material/dialog';
 import { NewFolderDialogComponent } from './modals/newFolderDialog/newFolderDialog.component';
 import { RenameDialogComponent } from './modals/renameDialog/renameDialog.component';
+import * as uniqueID from 'lodash.uniqueid';
+import * as filesize from 'filesize';
+import { DomSanitizer } from '@angular/platform-browser';
+import { FileService } from '../service/file.service';
 
 @Component({
   selector: 'file-explorer',
@@ -12,9 +15,10 @@ import { RenameDialogComponent } from './modals/renameDialog/renameDialog.compon
   styleUrls: ['./file-explorer.component.css']
 })
 export class FileExplorerComponent {
-  constructor(public dialog: MatDialog) {}
-
+  constructor(public dialog: MatDialog, public fileService: FileService, private sanitization: DomSanitizer) {}
+  uploadedFiles: any[] = [];
   @Input() fileElements: FileElement[];
+  fileElement: FileElement;
   @Input() canNavigateUp: string;
   @Input() path: string;
 
@@ -24,6 +28,7 @@ export class FileExplorerComponent {
   @Output() elementMoved = new EventEmitter<{ element: FileElement; moveTo: FileElement }>();
   @Output() navigatedDown = new EventEmitter<FileElement>();
   @Output() navigatedUp = new EventEmitter();
+  @Output() fileAdded = new EventEmitter<FileElement>();
 
   deleteElement(element: FileElement) {
     this.elementRemoved.emit(element);
@@ -44,7 +49,7 @@ export class FileExplorerComponent {
   }
 
   openNewFolderDialog() {
-    let dialogRef = this.dialog.open(NewFolderDialogComponent);
+    const dialogRef = this.dialog.open(NewFolderDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         this.folderAdded.emit({ name: res });
@@ -53,7 +58,7 @@ export class FileExplorerComponent {
   }
 
   openRenameDialog(element: FileElement) {
-    let dialogRef = this.dialog.open(RenameDialogComponent);
+    const dialogRef = this.dialog.open(RenameDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
         element.name = res;
@@ -66,4 +71,37 @@ export class FileExplorerComponent {
     event.preventDefault();
     viewChild.openMenu();
   }
+
+
+
+  handleUpload = (files: File[]) => {
+    const uploadedFiles = files.map(file => ({
+      file,
+      id: uniqueID(),
+      name: file.name,
+      readableSize: filesize(file.size),
+      preview: this.sanitization.bypassSecurityTrustStyle(`url(${URL.createObjectURL(file)})`),
+      progress: 0,
+      uploaded: false,
+      error: false,
+      url: null
+    }));
+
+    this.uploadedFiles.push(...uploadedFiles);
+
+    uploadedFiles.forEach(this.processUpload);
+
+  }
+
+  processUpload = (uploadedFile) => {
+    this.fileElement = new FileElement();
+    this.fileElement.id = uploadedFile.id;
+    this.fileElement.isFolder = false;
+    this.fileElement.name = uploadedFile.name;
+    this.fileElement.file = uploadedFile.file;
+    this.fileAdded.emit(this.fileElement);
+
+  }
+
+
 }
