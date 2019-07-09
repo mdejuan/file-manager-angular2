@@ -84,7 +84,8 @@ export class FileExplorerComponent {
       progress: 0,
       uploaded: false,
       error: false,
-      url: null
+      type: file.type,
+      url: `url(${URL.createObjectURL(file)})`
     }));
 
     this.uploadedFiles.push(...uploadedFiles);
@@ -99,9 +100,11 @@ export class FileExplorerComponent {
     this.fileElement.isFolder = false;
     this.fileElement.name = uploadedFile.name;
     this.fileElement.file = uploadedFile.file;
+    this.fileElement.preview = uploadedFile.preview;
+    this.fileElement.url = uploadedFile.url;
+    this.fileElement.type = uploadedFile.type;
     this.fileAdded.emit(this.fileElement);
 
   }
-
 
 }

@@ -17,18 +17,23 @@ export class AppComponent {
   canNavigateUp = false;
 
   ngOnInit() {
-    const folderA = this.fileService.add({ name: 'Folder A', isFolder: true, parent: 'root', file : null });
-    this.fileService.add({ name: 'Folder B', isFolder: true, parent: 'root' , file : null});
-    this.fileService.add({ name: 'Folder C', isFolder: true, parent: folderA.id , file : null});
+    const folderA = this.fileService.add({ name: 'Folder A', isFolder: true, parent: 'root',
+    file : null, preview: null, url: null, type: null});
+    this.fileService.add({ name: 'Folder B', isFolder: true, parent: 'root' , file : null,
+     preview: null, url: null, type: null });
+    this.fileService.add({ name: 'Folder C', isFolder: true, parent: folderA.id ,
+     file : null, preview: null, url: null, type: null });
     this.updateFileElementQuery();
   }
 
   addFolder(folder: { name: string }) {
-    this.fileService.add({ isFolder: true, name: folder.name, parent: this.currentRoot ? this.currentRoot.id : 'root', file : null });
+    this.fileService.add({ isFolder: true, name: folder.name, parent: this.currentRoot ?
+      this.currentRoot.id : 'root', file : null, preview: null, url: null, type: null });
     this.updateFileElementQuery();
   }
   addFile(element: FileElement) {
-    this.fileService.add({ isFolder: false, name: element.name, parent: this.currentRoot ? this.currentRoot.id : 'root', file : null });
+    this.fileService.add({ isFolder: false, name: element.name, parent: this.currentRoot ?
+      this.currentRoot.id : 'root', file : element.file, preview: element.preview, url: element.url, type: element.type });
     this.updateFileElementQuery();
   }
 
@@ -69,6 +74,7 @@ export class AppComponent {
 
   updateFileElementQuery() {
     this.fileElements = this.fileService.queryInFolder(this.currentRoot ? this.currentRoot.id : 'root');
+
   }
 
   pushToPath(path: string, folderName: string) {
